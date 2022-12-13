@@ -11,7 +11,7 @@ TRAIN_CSV_PATH = 'datasets/train.csv'
 IDEAL_CSV_PATH = 'datasets/ideal.csv'
 TEST_CSV_PATH = 'datasets/test.csv'
 
-class DataSets():
+class CSVHelper():
     
     def __init__(self):
         try:

@@ -1,10 +1,7 @@
 # External imports
 import sqlalchemy as db
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Float
-
-# Internal imports
-from datasets import DataSets
-from custom_exceptions import *
+import pandas as pd
 
 TRAIN_TBL_NAME = 'train'
 IDEAL_TBL_NAME = 'ideal'
@@ -50,35 +47,29 @@ class DBHelper():
                 Column('y45', Float), Column('y46', Float), Column('y47', Float), Column('y48', Float), 
                 Column('y49', Float), Column('y50', Float),
                 )
-        self.__copy_dataset_to_db()
+        
 
-    def __load_dataset_from_csv(self):
-        try:
-            ds = DataSets()
-        except DataSetNotFoundException as ex:
-            print('Error loading datasets.', ex)
-        except InvalidDataFormatException as ex:
-            print(ex)
-        else: 
-            return ds
-
-    def __copy_dataset_to_db(self):
-        ''' Reads the training and ideal datasets from CSV files and copy into SQLite database file. '''
-
+    def copy_train_to_db(self, train_data_frame):
+        return self.__copy_data_frame_to_db(TRAIN_TBL_NAME, train_data_frame)
+    
+    def copy_ideal_to_db(self, ideal_data_frame):
+        return self.__copy_data_frame_to_db(IDEAL_TBL_NAME, ideal_data_frame)
+    
+    def __copy_data_frame_to_db(self, table_name, table_data_frame):
         copy_success = False
         try:
-            ds = self.__load_dataset_from_csv()
-            if(ds is not None):
-                # Once the datasets are loaded, storing them into SQLite database.
-                # Using if_exists="replace" to avoid failure while overwriting.
-                ds.train.to_sql(TRAIN_TBL_NAME, self.connection, if_exists="replace")
-                ds.ideal.to_sql(IDEAL_TBL_NAME, self.connection, if_exists="replace")
-
-                copy_success = True
+            # Using if_exists="replace" to avoid failure while overwriting.
+            table_data_frame.to_sql(table_name, self.connection, if_exists="replace")
+            copy_success = True
         except Exception as ex:
-            print('Error copying dataset to table.', ex)
-        
+            print('Error copying dataset to table. Error: ', ex)
         return copy_success
+
+    def load_train_from_db(self):
+        return pd.read_sql(TRAIN_TBL_NAME, self.connection)
+    
+    def load_ideal_from_db(self):
+        return pd.read_sql(IDEAL_TBL_NAME, self.connection)
     
     # Destructor
     def __del__(self):
