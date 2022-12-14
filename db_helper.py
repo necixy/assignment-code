@@ -66,10 +66,10 @@ class DBHelper():
         return copy_success
 
     def load_train_from_db(self):
-        return pd.read_sql(TRAIN_TBL_NAME, self.connection)
+        return pd.read_sql(TRAIN_TBL_NAME, self.connection, index_col='index')
     
     def load_ideal_from_db(self):
-        return pd.read_sql(IDEAL_TBL_NAME, self.connection)
+        return pd.read_sql(IDEAL_TBL_NAME, self.connection, index_col='index')
     
     # Destructor
     def __del__(self):

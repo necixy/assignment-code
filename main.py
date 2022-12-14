@@ -39,8 +39,11 @@ def main():
     train_df = db_helper.load_train_from_db()
     ideal_df = db_helper.load_ideal_from_db()
 
+    print('Step 4: Finding best ideal functions for each train function.')
     data_analysis = DataAnalysis(train_df, ideal_df)
+    train_ideal_match = data_analysis.find_matching_ideal_functions()
     
+    print(train_ideal_match)
     
     print('Program executed successfully')
 
