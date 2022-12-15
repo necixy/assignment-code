@@ -43,7 +43,8 @@ def main():
     data_analysis = DataAnalysis(train_df, ideal_df)
     train_ideal_match = data_analysis.find_matching_ideal_functions()
     
-    print(train_ideal_match)
+    print('Step 5: Mapping test data to matched ideal functions.')
+    data_analysis.map_test_to_ideal(csv.test,csv.ideal, train_ideal_match)
     
     print('Program executed successfully')
 
