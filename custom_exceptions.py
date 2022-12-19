@@ -7,3 +7,8 @@ class InvalidDataFormatException(Exception):
     def __init__(self, message):
         self.message = message + ' Make sure the input files (train.csv, ideal.csv and test.csv) has same structure and columns as defined in the assignment.'
         super().__init__(self.message)
+
+class InitDatabaseException(Exception):
+    def __init__(self, message):
+        self.message = message + ' Make sure you have required permissions to create SQLite database in project\'s directory.'
+        super().__init__(self.message)

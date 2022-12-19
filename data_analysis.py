@@ -1,5 +1,6 @@
 # External imports
 import numpy as np
+import pandas as pd
 from math import sqrt
 
 class DataAnalysis():
@@ -68,11 +69,9 @@ class DataAnalysis():
         # We use the test data provided to determine for each and every x-y- pair of 
         # values whether or not they can be assigned to the four chosen ideal functions
 
-        mapped_tests = {}
-        unmapped_tests = {}
-
-        matching_count = 0
-        unmatching_count = 0
+        # Creating blank pandas data frames with column definitions. These will be used to store mapped and unmapped test points.
+        test_mapped_df = pd.DataFrame(columns = ['x', 'y', 'ideal_function', 'related_deviation'])
+        test_unmapped_df = pd.DataFrame(columns = ['x', 'y'])
 
         # Looping through all Test DataFrame rows using iterrows function.
         # Since Test dataset isn't expected to be too large in size, hence iterrows is being used to simplify, for large dataset vectorization is recommended.
@@ -81,18 +80,16 @@ class DataAnalysis():
             # Unpacking x and y value from current loop Test row.
             test_x, test_y = test_row
 
-            match_found = False
-
-
-            matching_ideal_function = None
-            matching_ideal_function_difference = 0
-
-            
+            # These two vars will store the mapped ideal function and it's difference (related deviation) with test function.
+            # In case there are multiple mapping ideal function with one test function, we will 
+            # over-write this with the best ideal function mapped having least difference with test function.
+            mapping_ideal_function = None
+            mapping_ideal_function_difference = 0
 
             # Looping through all 4 ideal match that we found earlier and passed to this function.
             for train_col, matching in ideal_match.items():
 
-                # Getting the ideal column name.
+                # Getting the ideal column name from 0th index of matching tuple.
                 ideal_col = matching[0]
 
                 # Getting the ideal column value for given Test X value. "ideal_col" is the name of matching ideal column.
@@ -105,41 +102,29 @@ class DataAnalysis():
                 # calculate the maximum deviation allowed (Criteria 2 of assignment) by multiplying it with sqrt(2).
                 max_deviation_allowed = matching[2] * sqrt(2)
 
+
                 # Based on Criteria 2 of mapping test data to ideal, we are checking if the difference between
                 # test and ideal is less than or equal to maximum deviation allowed.
 
                 # A test point can be mapped to an ideal function if the deviation between test point and ideal function 
-                # is smaller than the maximum deviation between that ideal function and its training function times sqrt(2).
+                # is smaller than the maximum deviation between that ideal function and its training function times sqrt(2).            
                 if (test_ideal_difference<=max_deviation_allowed):
                     
-                    if(matching_ideal_function == None or test_ideal_difference < matching_ideal_function_difference):
-                        matching_ideal_function = ideal_col
-                        matching_ideal_function_difference = test_ideal_difference
-
-                    # if ((test_x not in mapped_tests) or (mapped_tests[test_x][2]>test_ideal_difference)):
-                    #         mapped_tests[test_x]    = (test_x, test_y, test_ideal_difference, ideal_col)        
-                    #         match_found = True         
-
-            # if(not match_found):
-            #     unmapped_tests[test_x]    = (test_x, test_y, None, None)
-
-            if(matching_ideal_function is None):
-                unmatching_count += 1
-                unmapped_tests[test_x]    = (test_x, test_y, None, None)
+                    if(mapping_ideal_function == None or test_ideal_difference < mapping_ideal_function_difference):
+                        # In case there are multiple mapping ideal function with one test function, we will 
+                        # over-write this with the best ideal function having least difference.
+                        mapping_ideal_function = ideal_col
+                        mapping_ideal_function_difference = test_ideal_difference
+            
+            # Once loop of ideal functions is finished, we check if there was a mapping_ideal_function.
+            if(mapping_ideal_function is None):
+                # If not (None) we add the data in 'test_unmapped_df' DataFrame.
+                test_unmapped_df.loc[len(test_unmapped_df), test_unmapped_df.columns] = test_x, test_y
             else:
-                matching_count += 1
-                if(test_x in mapped_tests):
-                    print('dup test_x', test_x)
-                mapped_tests[test_x]    = (test_x, test_y, test_ideal_difference, ideal_col)        
+                # Else (if found a map) we add the data in 'test_mapped_df' DataFrame along with 'mapping_ideal_function' as well as 'mapping_ideal_function_difference'.
+                test_mapped_df.loc[len(test_mapped_df), test_mapped_df.columns] = test_x, test_y, mapping_ideal_function, mapping_ideal_function_difference
         
-        
-        print(f'ARR {len(mapped_tests)} items mapped out of {test_df.shape[0]} test items')
-        print(f'ARR {len(unmapped_tests)} items COULDN\'T out of {test_df.shape[0]} test items')
-        # mapped_x = [i[0] for i in mapped_tests.values()]
-        # mapped_points = [i[1] for i in mapped_tests.values()]
-
-        print(f'{matching_count} items mapped out of {test_df.shape[0]} test items')
-        print(f'{unmatching_count} items COULDN\'T out of {test_df.shape[0]} test items')
+        return {'test_mapped_df': test_mapped_df, 'test_unmapped_df': test_unmapped_df}
 
     def __sum_of_deviation_squared(self, train_col_data, ideal_col_data):
        
