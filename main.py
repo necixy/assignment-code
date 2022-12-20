@@ -3,6 +3,7 @@ from csv_helper import CSVHelper
 from db_helper import DBHelper
 from custom_exceptions import *
 from data_analysis import DataAnalysis
+from data_visualization import DataVisualization
 
 
 def load_csv():
@@ -63,6 +64,13 @@ def main():
     if(store_test_mapped_success is False or store_test_unmapped_success is False): 
         print('Error storing the test mapped and unmapped data into SQLite DB, hence stopping the program execution. Please fix the error mentioned above and try to run the program again.')
         return
+
+    print('Step 7: Data visualization (plotting) of Training Data (X with Y1, Y2, Y3 and Y4).')
+    data_visualization = DataVisualization()
+    data_visualization.plot_train_data(train_df)
+
+    print('Step 8: Data visualization (plotting) of "Matched Ideal Data" (X with matched 4 ideal columns).')
+    data_visualization.plot_matched_ideal_data(ideal_df, train_ideal_match)
 
     print('\n')
     print('All steps are completed successfully. You can browse the SQLite database file \'sqlite_database.db\' for seeing the mapped data.')
