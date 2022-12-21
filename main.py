@@ -6,21 +6,16 @@ from data_analysis import DataAnalysis
 from data_visualization import DataVisualization
 
 
-def load_csv():
+def main():
+
+    # Load the CSV.
+    print('Step 1: Loading the CSV files for train and ideal data.')
     try:
         csv = CSVHelper()
     except DataSetNotFoundException as ex:
         print('Error loading CSVHelper.', ex)
     except InvalidDataFormatException as ex:
         print(ex)
-    else: 
-        return csv
-
-def main():
-
-    # Load the CSV.
-    print('Step 1: Loading the CSV files for train and ideal data.')
-    csv = load_csv()
     # Proceed further only if we have successfully load the CSV data. 
     if(csv is None): 
         print('Error loading the CSV, hence stopping the program execution. Please fix the error mentioned above and try to run the program again.')
@@ -54,7 +49,6 @@ def main():
     test_map_result = data_analysis.map_test_to_ideal(csv.test, csv.ideal, train_ideal_match)
     test_mapped_df = test_map_result['test_mapped_df']
     test_unmapped_df = test_map_result['test_unmapped_df']
-    print(f'Test Mapping Result: Out of {csv.test.shape[0]} test functions, we found {test_mapped_df.shape[0]} items mapped and {test_unmapped_df.shape[0]} items unmapped.')
 
     print('Step 6: Storing the test data mapping result into SQLite database.')
     store_test_mapped_success = db_helper.store_test_mapped_to_db(test_mapped_df)
@@ -65,15 +59,25 @@ def main():
         print('Error storing the test mapped and unmapped data into SQLite DB, hence stopping the program execution. Please fix the error mentioned above and try to run the program again.')
         return
 
-    print('Step 7: Data visualization (plotting) of Training Data (X with Y1, Y2, Y3 and Y4).')
+    print('Step 7: Data visualization (plotting)')
     data_visualization = DataVisualization()
-    data_visualization.plot_train_data(train_df)
+    data_visualization.visualize(train_df, ideal_df, train_ideal_match, test_mapped_df)
 
-    print('Step 8: Data visualization (plotting) of "Matched Ideal Data" (X with matched 4 ideal columns).')
-    data_visualization.plot_matched_ideal_data(ideal_df, train_ideal_match)
+    print('\n\n')
+    print('All steps are completed successfully. ')
 
-    print('\n')
-    print('All steps are completed successfully. You can browse the SQLite database file \'sqlite_database.db\' for seeing the mapped data.')
+    # Printing outcome results.
+    print('\n\n')
+    print('Results: \n')
+    matched_ideal_y = [match[0] for match in train_ideal_match.values()]
+    print('-- Found 4 best matching ideal functions for given train functions: ', matched_ideal_y)
+    print(f'-- Out of {csv.test.shape[0]} test functions, {test_mapped_df.shape[0]} test functions (items) were mapped to above found 4 best matched ideal functions. And {test_unmapped_df.shape[0]} items were unmapped.')
+    print('-- Visualization: You can now see the visualization (Bokeh HTML) reports inside the "visualization" folder. The file "combined_visualization.html" has all 3 maps plotting done. You can also see individual visualization in remaining 3 files.')
+    print('-- Database: You can also browse the SQLite database file "database\sqlite_database.db" for seeing the mapped test functions in "test_mapped" table. Also the unmapped test functions are stored in "test_unmapped" tables. In addition the given CSV datasets train and ideal are also stored in the database tables "train" and "ideal" respectively.')
+
+    print('\n\n')
+
+    
 
 if __name__ == '__main__':
     main()

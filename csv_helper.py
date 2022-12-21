@@ -12,12 +12,52 @@ IDEAL_CSV_PATH = 'datasets/ideal.csv'
 TEST_CSV_PATH = 'datasets/test.csv'
 
 class CSVHelper():
+    '''
+    CSVHelper class deals with loading of CSV files for the project, which are train.csv, ideal.csv and test.csv. 
+    ...
+
+    Attributes
+    ----------
+    train : DataFrame
+        a pandas DataFrame loaded from train.csv file.
+    ideal : DataFrame
+        a pandas DataFrame loaded from ideal.csv file.
+    test : DataFrame
+        a pandas DataFrame loaded from test.csv file.
+
+    Private Methods
+    -------
+    __readCSV(filePath)
+        Private method for reading given CSV filePath using pandas.
+
+    '''
     
+    train = None
+    ideal = None
+    test = None
+
     def __init__(self):
+        '''
+        It loads all 3 files in class constructor using Pandas and assign to the parameters.
+        ...
+
+        Parameters
+        ----------
+        None.
+
+        Raises
+        ------
+        DataSetNotFoundException
+            If any of 3 CSV files not found.
+
+        InvalidDataFormatException
+            If any of CSV files not having expected columns.
+            
+        '''
         try:
-            self.train = self.readCSV(TRAIN_CSV_PATH)
-            self.ideal = self.readCSV(IDEAL_CSV_PATH)
-            self.test = self.readCSV(TEST_CSV_PATH)
+            self.train = self.__readCSV(TRAIN_CSV_PATH)
+            self.ideal = self.__readCSV(IDEAL_CSV_PATH)
+            self.test = self.__readCSV(TEST_CSV_PATH)
 
         except FileNotFoundError as ex:
             # Raising user-defined exception in case of CSV file not found.
@@ -32,6 +72,16 @@ class CSVHelper():
             if(self.test.shape[1] != 2):
                 raise InvalidDataFormatException('Invalid format for test.csv. It must have 2 columns.')
     
-    def readCSV(self, filePath):
+    def __readCSV(self, filePath):
+        '''
+        Private method for reading given CSV filePath using pandas.
+        ...
+
+        Parameters
+        ----------
+        filePath: str
+            File path of CSV file to be loaded/read.
+
+        '''
         return pd.read_csv(filePath)
     
