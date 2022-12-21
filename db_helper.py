@@ -14,17 +14,39 @@ TEST_MAPPED_TBL_NAME = 'test_mapped'
 TEST_UNMAPPED_TBL_NAME = 'test_unmapped'
 
 DB_FOLDER = "database"
-DATABASE_URL = DB_FOLDER + '/sqlite_database.db'
 
 class DBHelper():
     '''
-    The core class for dealing with all database operations of the assignment project. It mainly uses SQLAlchemy library to work with SQLite database.
+    The core class for dealing with all database operations of the assignment project. 
+    It mainly uses SQLAlchemy library to work with SQLite database.
 
     Public Methods
     ----------
+    copy_train_to_db(train_df)
+        Copies (stores) Train DataFrame provided, to the train table.
+
+    copy_ideal_to_db(ideal_df)
+        Copies (stores) Ideal DataFrame provided, to the train table.
+    
+    load_train_from_db()
+        Loads and returns the train dataset by reading the SQLite database train table.
+
+    load_ideal_from_db()
+        Loads and returns the ideal dataset by reading the SQLite database ideal table.
+    
+    store_test_mapped_to_db(test_mapped_df)
+        Copies (stores) Test (Mapped) DataFrame provided, to the test_mapped table.
+
+    store_test_unmapped_to_db(test_unmapped_df)
+        Copies (stores) Test (Un Mapped) DataFrame provided, to the test_unmapped table.        
+
+    Private Methods
+    ----------
+    __copy_data_frame_to_db(self, table_name, table_data_frame)
+        Stores the given data frame into the SQLite table with given table_name.
     '''
 
-    def __init__(self):
+    def __init__(self, db_name):
         '''
         Constructor of DBHelper Class. Main tasks are:
         - Creates the database folder.
@@ -32,10 +54,14 @@ class DBHelper():
         - Defines all table schemas.
 
         Raises
-        ------
+        ----------
         InitDatabaseException
             If there is problem while initializing or connecting to the database.
 
+        Parameter
+        ----------
+        db_name: str
+            Name of SQLite database file.
         '''
         try:
             # Creating the folder for database.
@@ -48,7 +74,7 @@ class DBHelper():
             # os.makedirs(DB_FOLDER)
 
             # Setting up connection.
-            self.engine = create_engine('sqlite:///' + DATABASE_URL)
+            self.engine = create_engine('sqlite:///' + DB_FOLDER + '/' + db_name + '.db')
             self.connection = self.engine.connect()
             self.meta = MetaData()
 

@@ -7,7 +7,10 @@ from data_visualization import DataVisualization
 
 
 def main():
-
+    '''
+    Main function that uses all other different classes to perform the tasks required in assignment description.
+    It can be described with the Steps which are being printed and at the end, it shows the results. 
+    '''
     # Load the CSV.
     print('Step 1: Loading the CSV files for train and ideal data.')
     try:
@@ -23,7 +26,7 @@ def main():
     
     print('Step 2: Copying the loaded CSV data into SQLite Database. (Will overwrite tables if they exists).')
     try:
-        db_helper = DBHelper()
+        db_helper = DBHelper('sqlite_database')
     except InitDatabaseException as ex:
         # Proceed further only if we have successfully initialized the SQLite database. 
         print(ex.message)
@@ -76,8 +79,6 @@ def main():
     print('-- Database: You can also browse the SQLite database file "database\sqlite_database.db" for seeing the mapped test functions in "test_mapped" table. Also the unmapped test functions are stored in "test_unmapped" tables. In addition the given CSV datasets train and ideal are also stored in the database tables "train" and "ideal" respectively.')
 
     print('\n\n')
-
-    
 
 if __name__ == '__main__':
     main()
