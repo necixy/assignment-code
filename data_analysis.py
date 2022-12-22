@@ -2,11 +2,13 @@
 import numpy as np
 import pandas as pd
 from math import sqrt
+from stats_analysis import StatsAnalysis
 
-class DataAnalysis():
+class DataAnalysis(StatsAnalysis):
     '''
     The core class for dealing with all data analysis of the assignment project. It does include all the analysis 
-    logic and implements all the criteria given in the assignment task description.
+    logic and implements all the criteria given in the assignment task description. It also inherits the class StatsAnalysis
+    which provides methods like sort_list, max_deviation, sum_of_deviation_squared.
 
     ...
 
@@ -27,15 +29,6 @@ class DataAnalysis():
 
     Private Methods
     -------
-    __sort_list(list)
-        Sorts list of tuple based on first index (second value) of tuple.
-
-    __max_deviation(col_1, col_2)
-        Finds the maximum deviation between two columns data (col_1 and col_2).
-
-    __sum_of_deviation_squared(train_col_data, ideal_col_data)
-        Finds the sum of squared deviation between train_col_data and 
-        ideal ideal_col_data. (As per criteria 1 of assignment.)
 
     __find_individual_matching_ideal(col_name)
         Finds the matching ideal function for a given train function.
@@ -56,6 +49,7 @@ class DataAnalysis():
             a pandas DataFrame for ideal dataset.
 
         '''
+        super().__init__()
         self.train_df = train_df
         self.ideal_df = ideal_df
 
@@ -180,69 +174,10 @@ class DataAnalysis():
         
         return {'test_mapped_df': test_mapped_df, 'test_unmapped_df': test_unmapped_df}
 
-    def __sort_list(self, list):
-        '''
-        Sorts list of tuple based on first index (second value) of tuple.
-        ...
-
-        Parameters
-        ----------
-        list: List
-            List to be sorted.
-        '''
-        # Sorting based on first index of tuple, so that match with least error comes on top.
-        return sorted(list, key = lambda x: x[1])
-
-    def __max_deviation(self, col_1, col_2):
-
-        '''
-        Finds the maximum deviation between two columns data (col_1 and col_2).
-
-        ...
-
-        Parameters
-        ----------
-        col_1 : NumPy Array
-            Column 1 data in NumPy array format.
-        
-        col_2 : NumPy Array
-            Column 2 data in NumPy array format.
-        '''
-        max_dev = np.max(np.abs(col_1 - col_2))
-        return max_dev
-    
-    def __sum_of_deviation_squared(self, train_col_data, ideal_col_data):
-        '''
-        Finds the sum of squared deviation between train_col_data and 
-        ideal ideal_col_data. (As per criteria 1 of assignment.)
-
-        ...
-
-        Parameters
-        ----------
-        train_col_data: NumPy Array
-            Column data of Train data given y column.
-
-        ideal_col_data: NumPy Array
-            Column data of Idea data given y column.
-        '''
-        
-        # As per criteria 1 of Assignment. 
-        error =  np.sum(np.square(train_col_data-ideal_col_data))
-
-        # Alternative methods to find errors between two columns data:
-        
-        # 1. Root Mean Square Error (RMSE):
-        # error =  np.sqrt(np.sum(np.square(train_col_data-ideal_col_data)) / len(train_col_data))
-
-        # 2. Mean Square Error (MSE):
-        # error =  np.sum(np.square(train_col_data-ideal_col_data)) / len(train_col_data)
-
-        return error
 
     def __find_individual_matching_ideal(self, col_name):
         '''
-        Finds the matching ideal function for a given train function by finding the error (using __sum_of_deviation_squared) 
+        Finds the matching ideal function for a given train function by finding the error (using sum_of_deviation_squared) 
         and returns the best matched ideal function that has the least error (sum_of_deviation_squared).
 
         ...
@@ -257,10 +192,10 @@ class DataAnalysis():
         for ideal_col in self.ideal_df.columns[1:]:
             ideal_col_data = self.ideal_df[ideal_col]
             # Finding error amount by Sum of deviations squared (Least Squared) for each ideal function.
-            error = self.__sum_of_deviation_squared(train_col_data, ideal_col_data)
+            error = self.sum_of_deviation_squared(train_col_data, ideal_col_data)
 
             # Since we're already looping, finding and storing maximum deviation between columns as it'll be required for Criteria 2 when working with Test functions.
-            max_dev = self.__max_deviation(train_col_data, ideal_col_data)
+            max_dev = self.max_deviation(train_col_data, ideal_col_data)
 
             # Appending the ideal column, it's error and maximum deviation in error list.
             error_list.append((ideal_col, error, max_dev))
@@ -271,5 +206,5 @@ class DataAnalysis():
         #       2. Error value (based on criteria 1 / sum of squared deviations).
         #       3. Maximum deviation between train and matching ideal function. (This will be used while working with test data.)
 
-        return self.__sort_list(error_list)[0]
+        return self.sort_list(error_list)[0]
     
