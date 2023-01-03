@@ -74,9 +74,9 @@ def main():
     print('Results: \n')
     matched_ideal_y = [match[0] for match in train_ideal_match.values()]
     print('-- Found 4 best matching ideal functions for given train functions: ', matched_ideal_y)
-    print(f'-- Out of {csv.test.shape[0]} test functions, {test_mapped_df.shape[0]} test functions (items) were mapped to above found 4 best matched ideal functions. And {test_unmapped_df.shape[0]} items were unmapped.')
-    print('-- Visualization: You can now see the visualization (Bokeh HTML) reports inside the "visualization" folder. The file "combined_visualization.html" has all 3 maps plotting done. You can also see individual visualization in remaining 3 files.')
-    print('-- Database: You can also browse the SQLite database file "database\sqlite_database.db" for seeing the mapped test functions in "test_mapped" table. Also the unmapped test functions are stored in "test_unmapped" tables. In addition the given CSV datasets train and ideal are also stored in the database tables "train" and "ideal" respectively.')
+    print(f'\n-- Out of {csv.test.shape[0]} test functions, {test_mapped_df.shape[0]} test functions (items) were mapped to above found 4 best matched ideal functions. And {test_unmapped_df.shape[0]} items were unmapped.\n')
+    print('-- Visualization: You can now see the visualization (Bokeh HTML) reports inside the "visualization" folder. The file "visualization.html" has all 12 maps plotting done. There are 4 rows, each containing 3 plots. First plot represents the train Y function, 2nd plot shows best matched ideal Y function and 3rd plot shows best matched ideal Y function and the test points mapped to it.\n')
+    print('-- Database: You can also browse the SQLite database file "database\sqlite_database.db" for seeing the mapped test functions in "test_mapped" table. Also the unmapped test functions are stored in "test_unmapped" tables. In addition the given CSV datasets train and ideal are also stored in the database tables "train" and "ideal" respectively.\n')
 
     print('\n\n')
 
