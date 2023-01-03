@@ -81,9 +81,9 @@ class DataVisualization():
         row_y1 = row(train_plot_y1, ideal_plot_y1, test_plot_y1)
 
         # Creating 3 plots i.e. train, ideal and test plots for Y2.
-        train_plot_y2 = self.__plot_train_data(train_df, 'y2', 'green')
-        ideal_plot_y2 = self.__plot_matched_ideal_data(ideal_df, train_ideal_match, 1, 'green')
-        test_plot_y2 = self.__plot_mapped_test_data(ideal_df, train_ideal_match, test_mapped_df, 1, 'green')
+        train_plot_y2 = self.__plot_train_data(train_df, 'y2', 'darkgreen')
+        ideal_plot_y2 = self.__plot_matched_ideal_data(ideal_df, train_ideal_match, 1, 'darkgreen')
+        test_plot_y2 = self.__plot_mapped_test_data(ideal_df, train_ideal_match, test_mapped_df, 1, 'darkgreen')
 
         # Combine these 3 plots into a row layout.
         row_y2 = row(train_plot_y2, ideal_plot_y2, test_plot_y2)
@@ -97,9 +97,9 @@ class DataVisualization():
         row_y3 = row(train_plot_y3, ideal_plot_y3, test_plot_y3)
 
         # Creating 3 plots i.e. train, ideal and test plots for Y4.
-        train_plot_y4 = self.__plot_train_data(train_df, 'y4', 'black')
-        ideal_plot_y4 = self.__plot_matched_ideal_data(ideal_df, train_ideal_match, 3, 'black')
-        test_plot_y4 = self.__plot_mapped_test_data(ideal_df, train_ideal_match, test_mapped_df, 3, 'black')
+        train_plot_y4 = self.__plot_train_data(train_df, 'y4', 'fuchsia')
+        ideal_plot_y4 = self.__plot_matched_ideal_data(ideal_df, train_ideal_match, 3, 'fuchsia')
+        test_plot_y4 = self.__plot_mapped_test_data(ideal_df, train_ideal_match, test_mapped_df, 3, 'fuchsia')
 
         # Combine these 3 plots into a row layout.
         row_y4 = row(train_plot_y4, ideal_plot_y4, test_plot_y4)
@@ -133,7 +133,7 @@ class DataVisualization():
         graph.y_range = Range1d(-50, 1000)
 
         # Plotting the train X and given train functions (either Y1, Y2, Y3 or Y4)
-        graph.line(train_df.x, train_df[y_col], line_color=line_color,legend_label=f'Train {y_col.upper()}')
+        graph.line(train_df.x, train_df[y_col], line_color=line_color,legend_label=f'Train {y_col.upper()}', line_width=2)
 
         # Returning the training graph object.
         return graph
@@ -177,7 +177,7 @@ class DataVisualization():
         graph.y_range = Range1d(-50, 1000)
 
         # Plotting the ideal X and best matched ideal functions at given index.
-        graph.line(ideal_df.x, ideal_df[matched_col], line_color=line_color,legend_label=f'Ideal {matched_col} - (Best match to Train y{y_index+1})')
+        graph.line(ideal_df.x, ideal_df[matched_col], line_color=line_color,legend_label=f'Ideal {matched_col} - (Best match to Train y{y_index+1})', line_width=2)
         
         # Returning the ideal graph object.
         return graph
@@ -228,9 +228,9 @@ class DataVisualization():
 
 
         # Plotting the given matched ideal function with line.
-        graph.line(ideal_df.x, ideal_df[matched_col], line_color=line_color,legend_label=f'Ideal {matched_col} - (Best match to Train y{y_index+1})')
+        graph.line(ideal_df.x, ideal_df[matched_col], line_color=line_color,legend_label=f'Ideal {matched_col} - (Best match to Train y{y_index+1})', line_width=2)
         # Plotting the mapped test data to the given matched ideal function with scatter on same color.
-        graph.scatter(test_points.x, test_points.y, fill_color=line_color, line_color=line_color, radius=0.2, legend_label=f'Mapped test points to Ideal {matched_col}')
+        graph.scatter(test_points.x, test_points.y, fill_color=line_color, line_color=line_color, radius=0.4, legend_label=f'Mapped test points to Ideal {matched_col}')
 
 
         # Returning the test graph object.
