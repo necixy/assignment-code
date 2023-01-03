@@ -91,7 +91,7 @@ you can replace train.csv, ideal.csv and test.csv only inside the "datasets" fol
 Answer: The one file with the name of "sqlite_database.db" is populated by real datasets inside "datasets" folder. The database file "unit_test_sqlite.db" is purely being used for Unit Testing and it's using unit testing datasets.
 
 #### Q. How do I see visualization reports?
-Answer: You can go inside "visualization" folder and you'll find one file, which are:
+Answer: You can go inside "visualization" folder and you'll find one file:
 - visualization.html
 
 It is recommended to see the visualization.html to see all 12 graph plots in one web page. There are 4 rows, each containing 3 plots. First plot represents the train Y function, 2nd plot shows best matched ideal Y function and 3rd plot shows best matched ideal Y function and the test points mapped to it.
