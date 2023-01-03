@@ -13,6 +13,7 @@ def main():
     '''
     # Load the CSV.
     print('Step 1: Loading the CSV files for train and ideal data.')
+    csv = None
     try:
         csv = CSVHelper()
     except DataSetNotFoundException as ex:
