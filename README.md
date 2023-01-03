@@ -56,7 +56,7 @@ On running main.py file you will see output like below:
 
   -- Found 4 best matching ideal functions for given train functions:  ['y35', 'y40', 'y18', 'y48']
   -- Out of 100 test functions, 40 test functions (items) were mapped to above found 4 best matched ideal functions. And 60 items were unmapped.
-  -- Visualization: You can now see the visualization (Bokeh HTML) reports inside the "visualization" folder. The file "combined_visualization.html" has all 3 maps plotting done. You can also see individual visualization in remaining 3 files.
+  -- Visualization: You can now see the visualization (Bokeh HTML) reports inside the "visualization" folder. The file "visualization.html" has all 12 maps plotting done. There are 4 rows, each containing 3 plots. First plot represents the train Y function, 2nd plot shows best matched ideal Y function and 3rd plot shows best matched ideal Y function and the test points mapped to it.
   -- Database: You can also browse the SQLite database file "database\sqlite_database.db" for seeing the mapped test functions in "test_mapped" table. Also the unmapped test functions are stored in "test_unmapped" tables. In addition the given CSV datasets train and ideal are also stored in the database tables "train" and "ideal" respectively.
 
 ```

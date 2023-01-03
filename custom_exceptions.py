@@ -12,7 +12,7 @@ class DataSetNotFoundException(Exception):
             Error message given at time of raising the exception.
 
         '''
-        self.message = str(message) + ' Please check that there are all 3 files "train.csv", "ideal.csv" and "test.csv" inside the "datasets folder inside the project root directory."'
+        self.message = str(message) + ' Please check that there are all 3 files "train.csv", "ideal.csv" and "test.csv" inside the "datasets" folder inside the project root directory."'
         super().__init__(self.message)
 
 class InvalidDataFormatException(Exception):
